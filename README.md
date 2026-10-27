@@ -2,6 +2,8 @@
 
 **Draw a flower on a painted garden and it grows along your line. The bees will find it.**
 
+**Live: [hive-interactive.vercel.app](https://hive-interactive.vercel.app)**
+
 HIVE is a living storybook garden in the browser, and the sibling of [MEADOW](https://github.com/Mariaareadne1/meadow-interactive): the same hand, a new world. A hand-painted tile of cottage garden — raked beds, a lawn with clover, a gravel path, stepping stones, a clipped hedge, an apple tree and a straw skep — floats on a sheet of paper. Draw on a bed or the lawn: a stem grows up along your stroke, a bud swells and opens petal by petal, and a little colony of bees leaves the hive to visit it, comes home dusted with gold, and does a waggle dance on the landing board.
 
 ![A painted garden tile on paper with flowers, a straw skep and bees](docs/media/01-garden.jpg)
@@ -83,6 +85,9 @@ Gardens save automatically in the browser (a versioned document; untrusted files
 The full write-up is in **[CASE_STUDY.md](CASE_STUDY.md)**; progress and known gaps in **[PROGRESS.md](PROGRESS.md)**.
 
 ## Development
+
+Deployed with the Vercel CLI (`npx vercel --prod`, project `hive-interactive`); `.vercelignore` keeps the large QA artifacts out of uploads.
+
 
 ```bash
 npm run typecheck      # tsc

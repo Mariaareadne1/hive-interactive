@@ -15,6 +15,8 @@
 
 ## Verified
 
+- Deployed 2026-10-27 to https://hive-interactive.vercel.app (Vercel CLI); the live page renders and a drawn spiral plants a rose with no page errors.
+
 - `npm run typecheck`, `npm run lint`, `npm test` (45 unit tests), `npm run build`.
 - `npm run test:e2e` and `E2E_PROD=1 npm run test:e2e` (22 browser tests each).
 - Demo recorded through the app's recorder and checked with ffprobe; contact sheet inspected.
@@ -22,7 +24,6 @@
 
 ## Not done, or only partly
 
-- **Not deployed.** The repo is public on GitHub; deploying to Vercel (`npx vercel --prod`) waits for the owner's go-ahead.
 - **Flower geometry variety** is two variants per kind plus per-flower colour, size, seed rotation and stem shape; more variants would help large gardens look less repetitive.
 - **Foxglove** reads well up close but is slender at the default camera; the spike could carry more, larger bells.
 - **Bees avoid obstacles by projection**, which is reliable but can look like a small sideways nudge when a bee's path grazes a bloom; a look-ahead planner would make detours smoother.

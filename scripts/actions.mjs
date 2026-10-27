@@ -1,0 +1,45 @@
+// Visual QA of selections and actions: node scripts/actions.mjs
+import { chromium } from '@playwright/test';
+import { mkdirSync } from 'node:fs';
+
+mkdirSync('artifacts', { recursive: true });
+const browser = await chromium.launch({ args: ['--use-angle=metal', '--enable-gpu'] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+page.on('pageerror', (e) => console.log('[pageerror]', e.message));
+page.on('console', (m) => m.type() === 'error' && console.log('[console]', m.text()));
+await page.goto('http://localhost:5376/?showcase');
+await page.waitForFunction(() => window.__hive && !window.__hive.store.get().loading, null, { timeout: 60000 });
+await page.waitForTimeout(6000);
+const shot = (n) => page.screenshot({ path: `artifacts/a-${n}.png` });
+const centre = (id) => page.evaluate((id) => {
+  const h = window.__hive, f = h.app.living.flowers.get(id), c = f.headCentre(f.head.position.clone()).project(h.engine.camera);
+  return [((c.x + 1) / 2) * innerWidth, ((1 - c.y) / 2) * innerHeight];
+}, id);
+const [x, y] = await centre('sc-rose1');
+await page.mouse.click(x, y);
+await page.waitForTimeout(400);
+await shot('flower-selected');
+await page.getByRole('button', { name: 'Water' }).click();
+await page.waitForTimeout(900);
+await shot('watering');
+await page.waitForTimeout(1500);
+console.log('rose height', await page.evaluate(() => window.__hive.store.doc.flowers.find((f) => f.id === 'sc-rose1').height.toFixed(3)));
+await page.keyboard.press('Escape');
+await page.evaluate(() => window.__hive.app.bees.rain());
+await page.waitForTimeout(2500);
+await shot('rain');
+await page.evaluate(() => window.__hive.app.bees.setGolden(1));
+await page.waitForTimeout(9000);
+await shot('golden');
+await page.evaluate(() => { window.__hive.app.bees.setGolden(0); window.__hive.app.bees.swarm(); });
+await page.waitForTimeout(2500);
+await shot('swarm');
+await page.evaluate(() => window.__hive.store.set({ selection: { kind: 'hive' } }));
+await page.waitForTimeout(500);
+await shot('hive-selected');
+const bee = await page.evaluate(() => [...window.__hive.app.living.colony.renderer.drawn.keys()][0]);
+await page.evaluate((id) => window.__hive.store.set({ selection: { kind: 'bee', id } }), bee);
+await page.waitForTimeout(300);
+await shot('bee-selected');
+console.log('honey', await page.evaluate(() => window.__hive.app.living.colony.colony.honey.toFixed(3)), 'bees', await page.evaluate(() => window.__hive.app.living.colony.colony.bees.length), 'fps', await page.evaluate(() => window.__hive.engine.fps.toFixed(1)));
+await browser.close();

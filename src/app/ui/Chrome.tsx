@@ -54,7 +54,7 @@ export function Chrome({ app, onCapture, onRecord }: ChromeProps) {
     return () => window.removeEventListener('pointerdown', close);
   }, [panel]);
 
-  const quiet = hasDrawn || selection !== null;
+  const quiet = hasDrawn || selection !== null || flowerCount > 3;
   const hint = quiet ? null : tool === 'draw' ? 'Draw a flower.' : null;
 
   const runMenu = (action: string) => {

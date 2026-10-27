@@ -137,7 +137,7 @@ export class Fx {
     }
     // rain: soft streaks, beds darken, then dry slowly afterward
     if (this.raining) {
-      const n = Math.round((this.reducedMotion ? 60 : 160) * dt * 3);
+      const n = Math.round((this.reducedMotion ? 90 : 260) * dt * 3);
       for (let i = 0; i < n; i++) {
         const x = (this.rand() * 2 - 1) * TILE.halfX * 0.95, z = (this.rand() * 2 - 1) * TILE.halfZ * 0.95;
         const y = terrainHeight(x, z);
@@ -145,10 +145,10 @@ export class Fx {
           pos: new THREE.Vector3(x + 0.6, y + 3.4, z),
           vel: new THREE.Vector3(-0.6, -9, 0),
           life: 0.36,
-          size: 0.05,
+          size: 0.075,
           color: WATER,
           shape: 'streak',
-          alpha: 0.55,
+          alpha: 0.8,
         });
       }
     }

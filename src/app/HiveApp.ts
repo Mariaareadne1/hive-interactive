@@ -172,9 +172,10 @@ export class HiveApp {
 
   // --- selection ------------------------------------------------------------
 
-  pickAt(clientX: number, clientY: number): Selection {
+  /** What is under the pointer. Bees are small and win ties — except when choosing a flower for one to visit. */
+  pickAt(clientX: number, clientY: number, flowersFirst = false): Selection {
     const rect = this.rect;
-    const bee = this.living.colony.renderer.pick(clientX, clientY, this.engine.camera, rect);
+    const bee = flowersFirst ? null : this.living.colony.renderer.pick(clientX, clientY, this.engine.camera, rect);
     if (bee !== null) return { kind: 'bee', id: bee };
     const ppm = (p: THREE.Vector3) => this.engine.pixelsPerMeterAt(p);
     const flower = this.living.flowers.pick(clientX, clientY, this.engine.camera, rect, ppm);

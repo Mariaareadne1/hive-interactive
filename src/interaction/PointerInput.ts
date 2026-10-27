@@ -68,8 +68,8 @@ export class PointerInput {
     } catch {
       // the pointer is already gone (or synthetic); events still arrive on the element
     }
-    const sel = this.app.pickAt(e.clientX, e.clientY);
     const visiting = this.app.store.get().visiting;
+    const sel = this.app.pickAt(e.clientX, e.clientY, visiting !== null);
     if (visiting !== null) {
       if (sel?.kind === 'flower') this.app.bees.visit(visiting, sel.id);
       else this.app.store.set({ visiting: null });

@@ -58,7 +58,7 @@ export function defaultProfile(lean = 0.08): P2[] {
   const out: P2[] = [];
   for (let i = 0; i < PROFILE_POINTS; i++) {
     const t = i / (PROFILE_POINTS - 1);
-    out.push([lean * Math.sin(t * Math.PI * 0.9) * t, t]);
+    out.push([lean * Math.sin(t * Math.PI * 0.9) * t + 0, t]); // + 0: no negative zero in saved files
   }
   return out;
 }

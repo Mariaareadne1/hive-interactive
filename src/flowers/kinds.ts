@@ -40,12 +40,14 @@ export interface KindSpec {
   readonly stemRadius: number;
   /** How far the bloom turns to face the viewer (radians). */
   readonly faceTilt: number;
+  /** Extra flowering stems fanned out from the same root (lavender grows as a clump). */
+  readonly clump?: number;
   readonly palettes: readonly Palette[];
 }
 
 export const KINDS: Record<FlowerKind, KindSpec> = {
   sunflower: {
-    label: 'Sunflower', minHeight: 1.5, maxHeight: 2.6, headHeight: 0.18, headRadius: 0.62, spike: 0,
+    label: 'Sunflower', minHeight: 1.5, maxHeight: 3.2, headHeight: 0.18, headRadius: 0.62, spike: 0,
     leaf: 'heart', leaves: 5, stemRadius: 0.045, faceTilt: 0.55,
     palettes: [
       { base: '#e9a530', tip: '#f6d25a', accent: '#5a3a22' },
@@ -83,8 +85,8 @@ export const KINDS: Record<FlowerKind, KindSpec> = {
     ],
   },
   lavender: {
-    label: 'Lavender', minHeight: 0.7, maxHeight: 1.2, headHeight: 0.04, headRadius: 0.12, spike: 0.38,
-    leaf: 'needle', leaves: 6, stemRadius: 0.014, faceTilt: 0,
+    label: 'Lavender', minHeight: 0.95, maxHeight: 1.5, headHeight: 0.04, headRadius: 0.16, spike: 0.42,
+    leaf: 'needle', leaves: 8, stemRadius: 0.016, faceTilt: 0, clump: 6,
     palettes: [
       { base: '#8c78cc', tip: '#b2a1e6', accent: '#6a58ae' },
       { base: '#9d87d8', tip: '#c3b4ef', accent: '#7563b8' },

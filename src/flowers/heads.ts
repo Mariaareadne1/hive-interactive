@@ -98,7 +98,7 @@ function rose(rand: () => number): BloomBuilder {
 /** Florets climbing the top of the stem, opening from the bottom up. */
 function lavender(rand: () => number): BloomBuilder {
   const b = new BloomBuilder();
-  const whorls = 16;
+  const whorls = 18;
   for (let w = 0; w < whorls; w++) {
     const f = w / (whorls - 1); // 0 top .. 1 bottom
     const n = w < 2 ? 3 : 6;
@@ -114,7 +114,7 @@ function lavender(rand: () => number): BloomBuilder {
         part: PART.floret,
         spike: 1,
       };
-      b.petalSurface({ length: 0.042 * size, width: 0.019 * size, widest: 0.6, tip: 'round', cup: 1.4, curl: 0.6, nu: 4, nv: 3 }, at);
+      b.petalSurface({ length: 0.046 * size, width: 0.02 * size, widest: 0.6, tip: 'round', cup: 1.4, curl: 0.6, nu: 4, nv: 3 }, at);
     }
   }
   return b;

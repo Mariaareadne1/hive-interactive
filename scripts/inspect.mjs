@@ -11,11 +11,11 @@ await page.goto(`http://localhost:5376/?${query}`);
 await page.waitForFunction(() => window.__hive?.engine, null, { timeout: 60000 });
 await page.waitForTimeout(Number(process.env.WAIT ?? 3500));
 await page.evaluate(([target, dist, lift]) => {
-  const h = window.__hive;
+  const h = window.__hive; const L = h.app.living;
   let c;
-  if (target === 'hive') c = h.garden.hive.group.position.clone().setY(0.8);
-  else if (target === 'bee') { const b = h.colony.colony.bees.find((b) => b.state === 'forage') ?? h.colony.colony.bees.find((b) => b.state !== 'inside'); c = h.colony.renderer.drawn.get(b.id).clone(); }
-  else c = h.flowers.get(target).headCentre(h.flowers.get(target).head.position.clone());
+  if (target === 'hive') c = L.garden.hive.group.position.clone().setY(0.8);
+  else if (target === 'bee') { const b = L.colony.colony.bees.find((b) => b.state === 'forage') ?? L.colony.colony.bees.find((b) => b.state !== 'inside'); c = L.colony.renderer.drawn.get(b.id).clone(); }
+  else c = L.flowers.get(target).headCentre(L.flowers.get(target).head.position.clone());
   h.engine.paused = true;
   h.engine.debugView({ x: c.x + dist * 0.15, y: c.y + lift * dist, z: c.z + dist }, c, 30);
   h.engine.paused = false;

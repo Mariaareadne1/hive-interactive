@@ -407,8 +407,8 @@ export interface FlowerMaterials {
   leaf: THREE.ShaderMaterial;
 }
 
-export function createFlowerMaterials(world: WorldUniforms, flower: FlowerUniforms): FlowerMaterials {
-  const uniforms = { ...world, ...flower };
+export function createFlowerMaterials(world: WorldUniforms, flower: FlowerUniforms, overrides: Record<string, THREE.IUniform> = {}): FlowerMaterials {
+  const uniforms = { ...world, ...flower, ...overrides };
   const mat = (vertexShader: string, fragmentShader: string, side: THREE.Side = THREE.FrontSide) =>
     new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader, side });
   return {

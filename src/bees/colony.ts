@@ -157,7 +157,7 @@ export class Colony {
     }
     if (out > want) {
       // send the extras home, a few at a time
-      const extra = this.bees.filter((b) => !b.retiring && b.state !== 'inside' && b.state !== 'enter' && b.state !== 'home');
+      const extra = this.bees.filter((b) => !b.retiring && !['inside', 'enter', 'home', 'dance'].includes(b.state));
       for (const b of extra.slice(0, out - want)) {
         if (quiet || b.state !== 'forage') {
           b.retiring = !quiet;

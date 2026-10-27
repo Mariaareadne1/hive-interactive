@@ -4,6 +4,7 @@ import { sampleStem, type P2 } from './stem';
 import { CENTRE, STEM_SAMPLES, createFlowerMaterials, createFlowerUniforms, stemGeometry, type FlowerMaterials, type FlowerUniforms } from './flowerMaterial';
 import { growthAt, leafUnfurl, GROWN, type GrowthFrame } from './growth';
 import { leafGeometry } from './leaves';
+import { ClumpStem } from './clump';
 import { seededRandom, noise2 } from '../scene/noise';
 import { terrainHeight } from '../scene/garden';
 import { SHADOW_LAYER, setDepthMaterial } from '../engine/shadows';
@@ -61,6 +62,7 @@ export class Flower {
   record: FlowerRecord;
   private readonly stem: THREE.Mesh;
   private headMesh: THREE.Mesh | null = null;
+  private readonly clump: ClumpStem[] = [];
   private readonly leaves: { mesh: THREE.Mesh; s: number; az: number; tilt: number; size: number }[] = [];
   private samples: P2[] = [];
   private shownHeight: number;
@@ -109,6 +111,12 @@ export class Flower {
     setDepthMaterial(this.stem, this.materials.stemDepth);
     this.root.add(this.stem);
     this.root.add(this.head);
+    const extra = (this.spec.clump ?? 1) - 1;
+    const rand = seededRandom(record.seed * 13 + 5);
+    for (let i = 0; i < extra; i++) {
+      const angle = (i / extra) * Math.PI * 2 + rand() * 0.6;
+      this.clump.push(new ClumpStem(world, this.uniforms, angle, 0.24 + rand() * 0.14, 0.78 + rand() * 0.2, this.root));
+    }
     this.buildLeaves();
     this.resample();
     this.update(0, 0, { wind: 1, golden: 0, load: 0, reducedMotion: false });
@@ -138,6 +146,7 @@ export class Flower {
     setDepthMaterial(this.headMesh, this.materials.headDepth);
     this.head.add(this.headMesh);
     this.head.scale.setScalar(this.record.scale * BLOOM_SCALE);
+    for (const c of this.clump) c.setHeadGeometry(geo, this.record.scale * BLOOM_SCALE);
   }
 
   private buildLeaves(): void {
@@ -246,6 +255,7 @@ export class Flower {
     this.stepSprings(dt, time, env);
     this.layoutCurve(f.grow);
     this.layoutHead(f, env);
+    for (const c of this.clump) c.layout(this.curve, f.grow, this.shownHeight, (this.record.seed % 628) / 100, this.head.visible);
     this.layoutLeaves(f.grow);
 
     const u = this.uniforms;
@@ -345,6 +355,7 @@ export class Flower {
   }
 
   private setShadows(stem: boolean, head: boolean): void {
+    if (this.clump.length && (stem !== this.shadowsOn.stem || head !== this.shadowsOn.head)) for (const c of this.clump) c.setShadows(stem, head);
     if (stem !== this.shadowsOn.stem) {
       this.shadowsOn.stem = stem;
       if (stem) this.stem.layers.enable(SHADOW_LAYER);
@@ -394,6 +405,7 @@ export class Flower {
   bounds(target = new THREE.Box3()): THREE.Box3 {
     target.makeEmpty();
     for (const c of this.curve) target.expandByPoint(c);
+    for (const k of this.clump) for (const c of k.points()) target.expandByPoint(c);
     const r = this.spec.headRadius * this.record.scale * BLOOM_SCALE;
     const hc = this.headCentre(tmpV);
     target.expandByPoint(hc.clone().addScalar(r));
@@ -403,6 +415,7 @@ export class Flower {
 
   dispose(): void {
     this.stem.geometry.dispose();
+    for (const c of this.clump) c.dispose();
     Object.values(this.materials).forEach((m) => m.dispose());
     this.root.removeFromParent();
   }

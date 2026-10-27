@@ -3,7 +3,7 @@ import type { Pt } from './stroke';
 /**
  * The pen line, drawn in an SVG over the canvas: thin, off-white, slightly
  * organic. Closed shapes get a faint fill. After release the line lingers as
- * a ghost while the sheep forms, then fades; rejected strokes shiver away.
+ * a ghost while the flower grows, then fades; rejected strokes shiver away.
  */
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -50,7 +50,7 @@ export class DrawingOverlay {
     this.fill.setAttribute('d', closedish ? `${d} Z` : '');
   }
 
-  /** Keep the line as a ghost while the sheep condenses, then let it go. */
+  /** Keep the line as a ghost while the stem grows along it, then let it go. */
   settle(accepted: boolean): void {
     const line = this.live;
     const fill = this.fill;
